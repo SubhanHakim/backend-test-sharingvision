@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
@@ -26,6 +27,11 @@ func Open(c config.Config) (*sql.DB, error) {
 	if boot, err := sql.Open("mysql", base+"?"+tls); err == nil {
 		if _, err := boot.Exec("CREATE DATABASE IF NOT EXISTS `" + c.DBName + "`"); err != nil {
 			log.Println("skip create database:", err)
+		}
+		// migrate memakai isolation SERIALIZABLE yang ditolak TiDB kecuali pengecekannya dimatikan.
+		var version string
+		if boot.QueryRow("SELECT VERSION()").Scan(&version) == nil && strings.Contains(version, "TiDB") {
+			tls += "&tidb_skip_isolation_level_check=1"
 		}
 		boot.Close()
 	}
