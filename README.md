@@ -11,7 +11,7 @@ go run ./cmd/server
 ```
 
 Saat start, program membuat database `article` lalu menjalankan migrate
-(`migrations/`) untuk membuat tabel `posts`. Server berjalan di `:8081`.
+(`migrations/`) untuk membuat tabel `posts`. Server berjalan di `:8082`.
 
 Konfigurasi lewat environment variable (semua opsional):
 
@@ -23,7 +23,7 @@ Konfigurasi lewat environment variable (semua opsional):
 | `DB_NAME` | `article`        |
 | `DB_TLS`  | *(kosong)*, isi `true` untuk MySQL cloud |
 | `PORT`    | dipakai jika `ADDR` kosong (diisi otomatis oleh Render) |
-| `ADDR`    | `:8081`          |
+| `ADDR`    | `:8082`          |
 | `CORS_ORIGIN` | `http://localhost:5173` |
 
 ## Struktur
@@ -59,7 +59,7 @@ Validasi: `title` min 20 karakter, `content` min 200, `category` min 3,
 Id tidak ditemukan → 404.
 
 ## Postman
-Import `postman_collection.json` (variabel `base` = `http://localhost:8081`).
+Import `postman_collection.json` (variabel `base` = `http://localhost:8082`).
 
 ## Deploy gratis (Render + MySQL cloud)
 1. Buat database MySQL gratis (mis. TiDB Cloud Serverless atau Aiven), catat host:port, user, password, nama database.

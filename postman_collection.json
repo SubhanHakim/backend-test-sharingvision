@@ -3,7 +3,7 @@
     "name": "Article - Sharing Vision",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [{ "key": "base", "value": "http://localhost:8081" }],
+  "variable": [{ "key": "base", "value": "http://localhost:8082" }],
   "item": [
     {
       "name": "Create article",

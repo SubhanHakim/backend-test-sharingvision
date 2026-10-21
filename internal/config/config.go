@@ -18,7 +18,7 @@ func Load() Config {
 		if p := os.Getenv("PORT"); p != "" { // diisi otomatis oleh Render dsb.
 			addr = ":" + p
 		} else {
-			addr = ":8081"
+			addr = ":8082"
 		}
 	}
 	return Config{
