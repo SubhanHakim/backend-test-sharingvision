@@ -61,13 +61,18 @@ Id tidak ditemukan → 404.
 ## Postman
 Import `postman_collection.json` (variabel `base` = `http://localhost:8082`).
 
-## Deploy gratis (Render + MySQL cloud)
-1. Buat database MySQL gratis (mis. TiDB Cloud Serverless atau Aiven), catat host:port, user, password, nama database.
-   Hindari karakter spesial (`@ / : ?`) pada password karena ikut masuk ke URL migrate.
-2. Di Render: **New → Web Service**, hubungkan repo GitHub ini.
-   - Runtime: `Go`
-   - Build Command: `go build -o app ./cmd/server`
-   - Start Command: `./app`
-3. Environment variables:
-   `DB_HOST` (host:port), `DB_USER`, `DB_PASS`, `DB_NAME`, `DB_TLS=true`, `CORS_ORIGIN` (URL FE).
-4. Deploy. Tabel dibuat otomatis oleh migrate saat start. Base URL = URL service Render.
+## Deploy
+Database: MySQL cloud (mis. TiDB Cloud Serverless). Catat host:port, user, password.
+Hindari karakter spesial (`@ / : ?`) pada password karena ikut masuk ke URL migrate.
+
+Environment variables (semua platform):
+`DB_HOST` (host:port), `DB_USER`, `DB_PASS`, `DB_NAME=article`, `DB_TLS=true`, `CORS_ORIGIN` (URL FE).
+`PORT` diisi otomatis oleh platform. Tabel dibuat otomatis oleh migrate saat start.
+
+### Railway (server biasa)
+1. **New Project → Deploy from GitHub repo**, pilih repo ini.
+2. Settings → Build: Build Command `go build -o app ./cmd/server`; Deploy: Start Command `./app`.
+3. Isi Variables di atas, lalu Settings → Networking → **Generate Domain**.
+
+### Vercel (serverless)
+Entry point `api/index.go`, routing di `vercel.json`. Import repo (preset **Other**), isi env yang sama.
