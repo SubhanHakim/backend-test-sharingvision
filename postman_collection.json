@@ -1,0 +1,39 @@
+{
+  "info": {
+    "name": "Article - Sharing Vision",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [{ "key": "base", "value": "http://localhost:8081" }],
+  "item": [
+    {
+      "name": "Create article",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Judul artikel yang cukup panjang\",\n  \"content\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.\",\n  \"category\": \"Tech\",\n  \"status\": \"publish\"\n}" },
+        "url": "{{base}}/article/"
+      }
+    },
+    {
+      "name": "List articles (limit/offset)",
+      "request": { "method": "GET", "url": "{{base}}/article/10/0" }
+    },
+    {
+      "name": "Get article by id",
+      "request": { "method": "GET", "url": "{{base}}/article/1" }
+    },
+    {
+      "name": "Update article",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Judul artikel yang sudah diubah\",\n  \"content\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.\",\n  \"category\": \"Tech\",\n  \"status\": \"draft\"\n}" },
+        "url": "{{base}}/article/1"
+      }
+    },
+    {
+      "name": "Delete article",
+      "request": { "method": "DELETE", "url": "{{base}}/article/1" }
+    }
+  ]
+}
