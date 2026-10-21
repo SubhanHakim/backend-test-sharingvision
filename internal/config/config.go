@@ -1,6 +1,9 @@
 package config
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 type Config struct {
 	DBUser     string
@@ -33,7 +36,7 @@ func Load() Config {
 }
 
 func env(k, d string) string {
-	if v := os.Getenv(k); v != "" {
+	if v := strings.TrimSpace(os.Getenv(k)); v != "" { // spasi hasil copy-paste ikut dibuang
 		return v
 	}
 	return d
