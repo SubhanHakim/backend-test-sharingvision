@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
@@ -13,27 +14,27 @@ import (
 	"article/migrations"
 )
 
-const dbName = "article"
-
 // Open membuat database jika belum ada, menjalankan migrate, lalu mengembalikan koneksi.
 func Open(c config.Config) (*sql.DB, error) {
 	base := c.DBUser + ":" + c.DBPass + "@tcp(" + c.DBHost + ")/"
-
-	boot, err := sql.Open("mysql", base)
-	if err != nil {
-		return nil, err
+	tls := ""
+	if c.DBTLS {
+		tls = "&tls=true"
 	}
-	_, err = boot.Exec("CREATE DATABASE IF NOT EXISTS " + dbName)
-	boot.Close()
-	if err != nil {
-		return nil, err
+
+	// MySQL cloud biasanya melarang CREATE DATABASE; abaikan jika gagal karena DB sudah disediakan.
+	if boot, err := sql.Open("mysql", base+"?"+tls); err == nil {
+		if _, err := boot.Exec("CREATE DATABASE IF NOT EXISTS `" + c.DBName + "`"); err != nil {
+			log.Println("skip create database:", err)
+		}
+		boot.Close()
 	}
 
 	src, err := iofs.New(migrations.FS, ".")
 	if err != nil {
 		return nil, err
 	}
-	m, err := migrate.NewWithSourceInstance("iofs", src, "mysql://"+base+dbName+"?multiStatements=true")
+	m, err := migrate.NewWithSourceInstance("iofs", src, "mysql://"+base+c.DBName+"?multiStatements=true"+tls)
 	if err != nil {
 		return nil, err
 	}
@@ -41,5 +42,5 @@ func Open(c config.Config) (*sql.DB, error) {
 		return nil, err
 	}
 
-	return sql.Open("mysql", base+dbName)
+	return sql.Open("mysql", base+c.DBName+"?"+tls)
 }

@@ -6,16 +6,28 @@ type Config struct {
 	DBUser     string
 	DBPass     string
 	DBHost     string
+	DBName     string
+	DBTLS      bool
 	Addr       string
 	CORSOrigin string
 }
 
 func Load() Config {
+	addr := env("ADDR", "")
+	if addr == "" {
+		if p := os.Getenv("PORT"); p != "" { // diisi otomatis oleh Render dsb.
+			addr = ":" + p
+		} else {
+			addr = ":8081"
+		}
+	}
 	return Config{
 		DBUser:     env("DB_USER", "root"),
 		DBPass:     env("DB_PASS", ""),
 		DBHost:     env("DB_HOST", "127.0.0.1:3306"),
-		Addr:       env("ADDR", ":8081"),
+		DBName:     env("DB_NAME", "article"),
+		DBTLS:      env("DB_TLS", "") == "true",
+		Addr:       addr,
 		CORSOrigin: env("CORS_ORIGIN", "http://localhost:5173"),
 	}
 }
