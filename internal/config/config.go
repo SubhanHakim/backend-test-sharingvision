@@ -36,7 +36,8 @@ func Load() Config {
 }
 
 func env(k, d string) string {
-	if v := strings.TrimSpace(os.Getenv(k)); v != "" { // spasi hasil copy-paste ikut dibuang
+	bom := string(rune(0xFEFF))
+	if v := strings.Trim(os.Getenv(k), " \t\r\n"+bom); v != "" { // spasi/BOM hasil copy-paste ikut dibuang
 		return v
 	}
 	return d
